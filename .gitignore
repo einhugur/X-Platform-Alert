@@ -9,3 +9,5 @@ Debug*/Debug*\ Libs
 *.rbuistate
 *.xojo_uistate
 *.obsolete
+source/.DS_Store
+.DS_Store
