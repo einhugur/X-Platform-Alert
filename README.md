@@ -4,6 +4,8 @@ Cross platform alert dialog for Xojo using NSAlert from Einhugur macOS Bridge Pl
 On Windows built in Xojo MessageDialog is used whenever the used features allow, and when more complex features 
 are used then more advanced custom dialog is used.
 
+The Einhugur MacOS Bridge Plugin can be obtained from: [(https://www.einhugur.com)]
+
 **For Windows, Xojo MessageDialog is used when feature set does not require more, else custom Alert is used.**
 
 ![GitHub Logo](/images/CrossPlatformAlert.PNG)
