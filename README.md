@@ -5,3 +5,5 @@ On Windows built in Xojo MessageDialog is used whenever the used features allow,
 are used then more advanced custom dialog is used.
 
 Linux support has not been tested or tuned yet.
+
+![GitHub Logo](/images/CrossPlatformAlert.PNG)
