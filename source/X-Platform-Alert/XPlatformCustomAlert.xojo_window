@@ -281,7 +281,7 @@ End
 		  Dim bottomValue as Integer = lblMessage.Top + lblMessage.Height 
 		  
 		  if mShowsSuppressionButton then
-		    chkSuppressionButton.Top = bottomValue + 1
+		    chkSuppressionButton.Top = bottomValue + 7
 		    chkSuppressionButton.Visible = true
 		    chkSuppressionButton.Value = SuppressButtonValue
 		    bottomValue = chkSuppressionButton.Top + chkSuppressionButton.Height

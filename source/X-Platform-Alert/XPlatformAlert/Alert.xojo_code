@@ -8,7 +8,7 @@ Protected Class Alert
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub ShowModal()
+		Function ShowModal() As Integer
 		  
 		  #if TargetMacOS
 		    var alert as EinhugurMacOSBridge.NSAlert = new EinhugurMacOSBridge.NSAlert()
@@ -24,10 +24,10 @@ Protected Class Alert
 		    case MessageDialog.IconTypes.Caution
 		      alert.AlertStyle = EinhugurMacOSBridge.NSAlert.StyleValues.Critical 
 		      
-		     case MessageDialog.IconTypes.Note
+		    case MessageDialog.IconTypes.Note
 		      alert.AlertStyle = EinhugurMacOSBridge.NSAlert.StyleValues.Informational
 		      
-		      case MessageDialog.IconTypes.Question
+		    case MessageDialog.IconTypes.Question
 		      alert.AlertStyle = EinhugurMacOSBridge.NSAlert.StyleValues.Informational
 		      
 		    case MessageDialog.IconTypes.Stop
@@ -53,8 +53,11 @@ Protected Class Alert
 		    
 		    alert.ShowsSuppressionButton = ShowsSuppressionButton
 		    
-		    if SuppressionButtonTitle.Length > 0 then
-		      alert.SuppressionButton.Title = SuppressionButtonTitle
+		    if ShowsSuppressionButton then
+		      if SuppressionButtonTitle.Length > 0 then
+		        alert.SuppressionButton.Title = SuppressionButtonTitle
+		      end if
+		      //TODO - set suppression button value
 		    end if
 		    
 		    var result as Integer = alert.RunModal()
@@ -63,13 +66,30 @@ Protected Class Alert
 		    if AlternateButton2Title <> "" or ShowsSuppressionButton then
 		      // We need to use Custom dialog here
 		      
+		      var dlg as XPlatformCustomAlert = new XPlatformCustomAlert( _
+		      Message, _
+		      Explanation, _
+		      ShowsSuppressionButton, _
+		      SuppressionButtonValue, _
+		      SuppressionButtonTitle, _
+		      CancelButtonTitle, _
+		      AlternateButton2Title, _ 
+		      AlternateButton1Title, _
+		      ActionButtonTitle, _ 
+		      IconType, _
+		      Title)
+		      
+		      dlg.ShowModal()
+		      
 		      if ShowsSuppressionButton then
-		        if SuppressionButtonTitle.Length = 0 then
-		          SuppressionButtonTitle = "Do not show this message again"
-		        end if
+		        SuppressionButtonValue = dlg.SuppressButtonValue
 		      end if
 		      
+		      return dlg.ModalResult
+		      
 		    else
+		      // We just use Xojo MessageDialog for this case
+		      
 		      var primaryDone as Boolean
 		      var dlg as MessageDialog = new MessageDialog()
 		      dlg.Title = Title
@@ -98,9 +118,23 @@ Protected Class Alert
 		        dlg.AlternateActionButton.Visible = false 
 		      end if
 		      
+		      var btn as MessageDialogButton = dlg.ShowModal()
+		      
+		      select case btn
+		        
+		      case dlg.CancelButton
+		        return 0
+		        
+		      case dlg.ActionButton
+		        return 1
+		        
+		      case else
+		        return 2
+		        
+		      end select
 		    end if
 		  #endif
-		End Sub
+		End Function
 	#tag EndMethod
 
 
@@ -150,6 +184,10 @@ Protected Class Alert
 
 	#tag Property, Flags = &h0
 		SuppressionButtonTitle As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		SuppressionButtonValue As Boolean
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -260,7 +298,7 @@ Protected Class Alert
 			Group="Behavior"
 			InitialValue=""
 			Type="String"
-			EditorType=""
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="IconType"
@@ -268,7 +306,14 @@ Protected Class Alert
 			Group="Behavior"
 			InitialValue=""
 			Type="MessageDialog.IconTypes"
-			EditorType=""
+			EditorType="Enum"
+			#tag EnumValues
+				"1 - Caution"
+				"-1 - None"
+				"0 - Note"
+				"3 - Question"
+				"2 - Stop"
+			#tag EndEnumValues
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="ActionIsDestructive"
@@ -300,7 +345,7 @@ Protected Class Alert
 			Group="Behavior"
 			InitialValue=""
 			Type="String"
-			EditorType=""
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

@@ -24,127 +24,11 @@ Begin Window Window1
    Type            =   0
    Visible         =   True
    Width           =   600
-   Begin PushButton PushButton1
-      AllowAutoDeactivate=   True
-      Bold            =   False
-      Cancel          =   False
-      Caption         =   "Show alert"
-      Default         =   False
-      Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
-      FontUnit        =   0
-      Height          =   20
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   20
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      MacButtonStyle  =   0
-      Scope           =   0
-      TabIndex        =   0
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Tooltip         =   ""
-      Top             =   20
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   117
-   End
-   Begin Listbox Listbox1
-      AllowAutoDeactivate=   True
-      AllowAutoHideScrollbars=   True
-      AllowExpandableRows=   False
-      AllowFocusRing  =   True
-      AllowResizableColumns=   False
-      AllowRowDragging=   False
-      AllowRowReordering=   False
-      Bold            =   False
-      ColumnCount     =   1
-      ColumnWidths    =   ""
-      DataField       =   ""
-      DataSource      =   ""
-      DefaultRowHeight=   -1
-      DropIndicatorVisible=   False
-      Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
-      FontUnit        =   0
-      GridLinesHorizontalStyle=   0
-      GridLinesVerticalStyle=   0
-      HasBorder       =   True
-      HasHeader       =   False
-      HasHorizontalScrollbar=   False
-      HasVerticalScrollbar=   True
-      HeadingIndex    =   -1
-      Height          =   360
-      Index           =   -2147483648
-      InitialParent   =   ""
-      InitialValue    =   ""
-      Italic          =   False
-      Left            =   241
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      RequiresSelection=   False
-      RowSelectionType=   0
-      Scope           =   2
-      TabIndex        =   1
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Tooltip         =   ""
-      Top             =   20
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   300
-      _ScrollOffset   =   0
-      _ScrollWidth    =   -1
-   End
-   Begin PushButton PushButton2
-      AllowAutoDeactivate=   True
-      Bold            =   False
-      Cancel          =   False
-      Caption         =   "Button"
-      Default         =   False
-      Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
-      FontUnit        =   0
-      Height          =   20
-      Index           =   -2147483648
-      InitialParent   =   ""
-      Italic          =   False
-      Left            =   20
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      MacButtonStyle  =   0
-      Scope           =   0
-      TabIndex        =   2
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Tooltip         =   ""
-      Top             =   108
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   80
-   End
    Begin PushButton PushButton3
       AllowAutoDeactivate=   True
       Bold            =   False
       Cancel          =   False
-      Caption         =   "Button"
+      Caption         =   "Show Alert"
       Default         =   False
       Enabled         =   True
       FontName        =   "System"
@@ -166,11 +50,11 @@ Begin Window Window1
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   140
+      Top             =   20
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   80
+      Width           =   94
    End
 End
 #tag EndWindow
@@ -178,65 +62,6 @@ End
 #tag WindowCode
 #tag EndWindowCode
 
-#tag Events PushButton1
-	#tag Event
-		Sub Action()
-		  using EinhugurMacOSBridge
-		  
-		  var alert as NSAlert = new NSAlert()
-		  
-		  alert.MessageText = "Some alert"
-		  alert.InformativeText = "This is a test alert"
-		  
-		  call alert.AddButtonWithTitle("Do Something")
-		  
-		  // Putting destructive action, makes the button have additional warning  indicator on Big Sur
-		  alert.AddButtonWithTitle("Delete something").HasDestructiveAction = true
-		  
-		  call alert.AddButtonWithTitle("Cancel")
-		  
-		  var result as Integer = alert.RunModal()
-		  
-		  select case result
-		  case 1000
-		    // React to the Do something command
-		    Listbox1.AddRow("Do something was selected")
-		  case 1001
-		    // React to the Delete something command
-		    Listbox1.AddRow("Delete something was selected")
-		  case 1002
-		    // React to the Cancel command
-		    Listbox1.AddRow("Cancel was selected")
-		  end select
-		  
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events PushButton2
-	#tag Event
-		Sub Action()
-		  Var d As New MessageDialog                  // declare the MessageDialog object
-		  Var b As MessageDialogButton                // for handling the result
-		  d.IconType = MessageDialog.IconTypes.Caution       // display warning icon
-		  d.ActionButton.Caption = "Save"
-		  d.CancelButton.Visible = True               // show the Cancel button
-		  d.AlternateActionButton.Visible = True      // show the "Don't Save" button
-		  d.AlternateActionButton.Caption = "Don't Save"
-		  d.Message = "Do you want to save changes to this document before closing?"
-		  d.Explanation = "If you don't save, your changes will be lost. "
-		  
-		  b = d.ShowModal                             // display the dialog
-		  Select Case b                               // determine which button was pressed.
-		  Case d.ActionButton
-		    // user pressed Save
-		  Case d.AlternateActionButton
-		    // user pressed Don't Save
-		  Case d.CancelButton
-		    // user pressed Cancel
-		  End Select
-		End Sub
-	#tag EndEvent
-#tag EndEvents
 #tag Events PushButton3
 	#tag Event
 		Sub Action()
@@ -247,11 +72,33 @@ End
 		  
 		  alert.IconType = MessageDialog.IconTypes.Caution 
 		  
+		  alert.ShowsSuppressionButton = true
+		  
 		  alert.ActionButtonTitle = "Save"
 		  alert.CancelButtonTitle = "Cancel"
-		  alert.AlternateButton1Title = "Something"
+		  alert.AlternateButton1Title = "Do not save"
+		  alert.AlternateButton1IsDestructive = true // This will make macOS Big Sur system flag the button with red.
 		  
-		  alert.ShowModal
+		  var dialogResult as Integer = alert.ShowModal()
+		  
+		  select case dialogResult
+		    
+		  case 0
+		    // Cancel
+		    return
+		    
+		  case 1
+		    // Action - Save in this case
+		    
+		    
+		  case 2
+		    // Alternate action
+		    
+		  end select
+		  
+		  // Check result of the suppression button
+		  var suppress as Boolean = alert.SuppressionButtonValue
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents
