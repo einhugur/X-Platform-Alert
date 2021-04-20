@@ -9,5 +9,6 @@ Linux support has not been tested or tuned yet.
 ![GitHub Logo](/images/CrossPlatformAlert.PNG)
 
 For macOS native NSAlert is used.
+
 ![GitHub Logo](/images/MacOSAlert.PNG)
 
