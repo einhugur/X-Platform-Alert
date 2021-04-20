@@ -33,19 +33,19 @@ alert.CancelButtonTitle = "Cancel"
 alert.AlternateButton1Title = "Do not save"
 alert.AlternateButton1IsDestructive = true // This will make macOS Big Sur system flag the button with red.
 
-var dialogResult as Integer = alert.ShowModal()
+var dialogResult as XPlatformAlert.AlertResult = alert.ShowModal()
 
 select case dialogResult
   
-case 0
+case XPlatformAlert.AlertResult.Cancel
   // Cancel
   return
   
-case 1
+case XPlatformAlert.AlertResult.Action
   // Action - Save in this case
   
   
-case 2
+case XPlatformAlert.AlertResult.AlternateAction1
   // Alternate action
   
 end select
