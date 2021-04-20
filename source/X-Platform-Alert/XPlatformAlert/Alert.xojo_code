@@ -57,10 +57,28 @@ Protected Class Alert
 		      if SuppressionButtonTitle.Length > 0 then
 		        alert.SuppressionButton.Title = SuppressionButtonTitle
 		      end if
-		      //TODO - set suppression button value
+		      alert.SuppressionButton.State = if(SuppressionButtonValue,  EinhugurMacOSBridge.NSButton.ControlStateValues.ON, EinhugurMacOSBridge.NSButton.ControlStateValues.OFF)
 		    end if
 		    
 		    var result as Integer = alert.RunModal()
+		    
+		    if ShowsSuppressionButton then
+		      SuppressionButtonValue = (alert.SuppressionButton.State = EinhugurMacOSBridge.NSButton.ControlStateValues.ON)
+		    end if
+		    
+		    select case result
+		    case 1001
+		      return 0
+		      
+		    case 1000
+		      return 1
+		      
+		    case 1002
+		      return 2
+		      
+		    case 1003
+		      return 3
+		    end select
 		    
 		  #else
 		    if AlternateButton2Title <> "" or ShowsSuppressionButton then
@@ -346,6 +364,14 @@ Protected Class Alert
 			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="SuppressionButtonValue"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="Boolean"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
