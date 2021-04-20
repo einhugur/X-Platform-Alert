@@ -303,6 +303,8 @@ End
 	#tag Method, Flags = &h0
 		Sub Constructor(message as String, explaination as String, showsSuppressionButton as Boolean, suppressionButtonValue as Boolean, suppressionButtonTitle as String, cancelButtonTitle as String, altButton2Title as String, altButton1Title as String, actionButtonTitle as String, alertStyle as MessageDialog.IconTypes, title as String)
 		  // Calling the overridden superclass constructor.
+		  ModalResult = XPlatformAlert.AlertResult.Cancel
+		  
 		  self.mMessage = message
 		  self.mExplaination = explaination
 		  self.mShowsSuppressionButton = showsSuppressionButton 
@@ -400,7 +402,7 @@ End
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		ModalResult As Integer
+		ModalResult As XPlatformAlert.AlertResult
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -457,7 +459,7 @@ End
 #tag Events btnAction
 	#tag Event
 		Sub Action()
-		  ModalResult = 1
+		  ModalResult = XPlatformAlert.AlertResult.Action
 		  
 		  if mShowsSuppressionButton then
 		    SuppressButtonValue = chkSuppressionButton.Value
@@ -481,7 +483,7 @@ End
 #tag Events btnAltButton2
 	#tag Event
 		Sub Action()
-		  ModalResult = 3
+		  ModalResult = XPlatformAlert.AlertResult.AlternateAction2
 		  
 		  if mShowsSuppressionButton then
 		    SuppressButtonValue = chkSuppressionButton.Value
@@ -495,7 +497,7 @@ End
 #tag Events btnAltButton1
 	#tag Event
 		Sub Action()
-		  ModalResult = 2
+		  ModalResult = XPlatformAlert.AlertResult.AlternateAction1
 		  
 		  if mShowsSuppressionButton then
 		    SuppressButtonValue = chkSuppressionButton.Value

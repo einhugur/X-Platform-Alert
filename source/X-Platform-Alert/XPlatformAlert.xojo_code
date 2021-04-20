@@ -1,5 +1,13 @@
 #tag Module
 Protected Module XPlatformAlert
+	#tag Enum, Name = AlertResult, Flags = &h0
+		Cancel = 0
+		  Action= 1
+		  AlternateAction1 = 2
+		AlternateAction2 = 3
+	#tag EndEnum
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Name"

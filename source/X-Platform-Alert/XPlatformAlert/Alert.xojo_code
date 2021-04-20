@@ -8,7 +8,7 @@ Protected Class Alert
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function ShowModal() As Integer
+		Function ShowModal() As XPlatformAlert.AlertResult
 		  
 		  #if TargetMacOS
 		    var alert as EinhugurMacOSBridge.NSAlert = new EinhugurMacOSBridge.NSAlert()
@@ -68,16 +68,16 @@ Protected Class Alert
 		    
 		    select case result
 		    case 1001
-		      return 0
+		      return XPlatformAlert.AlertResult.Cancel
 		      
 		    case 1000
-		      return 1
+		      return XPlatformAlert.AlertResult.Action
 		      
 		    case 1002
-		      return 2
+		      return XPlatformAlert.AlertResult.AlternateAction1
 		      
 		    case 1003
-		      return 3
+		      return XPlatformAlert.AlertResult.AlternateAction2
 		    end select
 		    
 		  #else
@@ -141,13 +141,13 @@ Protected Class Alert
 		      select case btn
 		        
 		      case dlg.CancelButton
-		        return 0
+		        return XPlatformAlert.AlertResult.Cancel
 		        
 		      case dlg.ActionButton
-		        return 1
+		        return XPlatformAlert.AlertResult.Action
 		        
 		      case else
-		        return 2
+		        return XPlatformAlert.AlertResult.AlternateAction1
 		        
 		      end select
 		    end if
