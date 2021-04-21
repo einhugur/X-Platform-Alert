@@ -108,7 +108,6 @@ Protected Class Alert
 		    else
 		      // We just use Xojo MessageDialog for this case
 		      
-		      var primaryDone as Boolean
 		      var dlg as MessageDialog = new MessageDialog()
 		      dlg.Title = Title
 		      dlg.Message = Message

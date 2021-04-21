@@ -76,7 +76,7 @@ Begin Window XPlatformCustomAlert
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
-      Text            =   "Do you want to save changes to this document before closing?"
+      Text            =   ""
       TextAlignment   =   0
       TextColor       =   &c00000000
       Tooltip         =   ""
@@ -247,6 +247,41 @@ Begin Window XPlatformCustomAlert
       Visible         =   False
       Width           =   80
    End
+   Begin Label lblLinuxExplain
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   62
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   True
+      LockTop         =   True
+      Multiline       =   True
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   7
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   ""
+      TextAlignment   =   0
+      TextColor       =   &c00000000
+      Tooltip         =   ""
+      Top             =   28
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   False
+      Width           =   405
+   End
 End
 #tag EndWindow
 
@@ -272,22 +307,62 @@ End
 		  g.FontSize = lblMessage.FontSize
 		  g.FontName = lblMessage.FontName
 		  
-		  var combined as String = mMessage + EndOfLine + EndOfLine + mExplaination
+		  var bottomValue as Integer 
 		  
-		  lblMessage.Height = g.TextHeight(combined, lblMessage.Width - 1)
+		  #if TargetLinux
+		    g.Bold = true
+		    lblMessage.Bold = true
+		    
+		    lblMessage.Height = g.TextHeight(mMessage, lblMessage.Width - 1)
+		    lblMessage.Text = mMessage
+		    
+		    g.Bold = false
+		    
+		    if mExplanation.Length > 0 then
+		      lblLinuxExplain.Top = lblMessage.Top + lblMessage.Height + 10
+		      lblLinuxExplain.Height = g.TextHeight(mExplanation, lblLinuxExplain.Width - 1)
+		      
+		      lblLinuxExplain.Text = mExplanation
+		      lblLinuxExplain.Visible = true
+		      
+		      bottomValue = lblLinuxExplain.Top + lblLinuxExplain.Height 
+		    else
+		      bottomValue = lblMessage.Top + lblMessage.Height 
+		    end if
+		  #else
+		    var combined as String = mMessage + EndOfLine + EndOfLine + mExplanation
+		    
+		    lblMessage.Height = g.TextHeight(combined, lblMessage.Width - 1)
+		    
+		    lblMessage.Value = combined
+		    
+		    bottomValue = lblMessage.Top + lblMessage.Height 
+		  #endif
 		  
-		  lblMessage.Value = combined
-		  
-		  Dim bottomValue as Integer = lblMessage.Top + lblMessage.Height 
 		  
 		  if mShowsSuppressionButton then
-		    chkSuppressionButton.Top = bottomValue + 7
+		    #if TargetLinux
+		      chkSuppressionButton.Top = bottomValue + 12
+		    #else
+		      chkSuppressionButton.Top = bottomValue + 7
+		    #endif
 		    chkSuppressionButton.Visible = true
 		    chkSuppressionButton.Value = SuppressButtonValue
 		    bottomValue = chkSuppressionButton.Top + chkSuppressionButton.Height
 		  end if
 		  
-		  self.Height = Max(92, bottomValue + 42)
+		  #if TargetLinux
+		    chkSuppressionButton.Left = chkSuppressionButton.Left - 6
+		    
+		    self.Height = Max(92, bottomValue + 58)
+		    
+		    btnAction.Top = btnAction.Top - 12
+		    btnCancel.Top = btnCancel.Top - 12
+		    btnAltButton1.Top = btnAltButton1.Top - 12
+		    btnAltButton2.Top = btnAltButton2.Top - 12
+		  #else
+		    self.Height = Max(92, bottomValue + 42)
+		  #endif
 		  
 		  
 		End Sub
@@ -296,7 +371,12 @@ End
 
 	#tag Method, Flags = &h21
 		Private Function CalculateButtonWidth(g as Graphics, btn as PushButton) As Integer
-		  return Max(g.TextWidth(btn.Caption) + 20, 80)
+		  #if TargetLinux
+		    return Max(g.TextWidth(btn.Caption) + 50, 80)
+		  #else
+		    return Max(g.TextWidth(btn.Caption) + 20, 80)
+		  #endif
+		  
 		End Function
 	#tag EndMethod
 
@@ -306,7 +386,7 @@ End
 		  ModalResult = XPlatformAlert.AlertResult.Cancel
 		  
 		  self.mMessage = message
-		  self.mExplaination = explaination
+		  self.mExplanation = explaination
 		  self.mShowsSuppressionButton = showsSuppressionButton 
 		  self.mAlertStyle = alertStyle
 		  self.SuppressButtonValue = suppressionButtonValue
@@ -394,7 +474,7 @@ End
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
-		Private mExplaination As String
+		Private mExplanation As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -419,6 +499,8 @@ End
 #tag Events Canvas1
 	#tag Event
 		Sub Paint(g As Graphics, areas() As REALbasic.Rect)
+		  #pragma Unused areas
+		  
 		  select case mAlertStyle
 		  case MessageDialog.IconTypes.Caution
 		    g.DrawCautionIcon(1,7)
@@ -449,7 +531,7 @@ End
 		      
 		    #else
 		      
-		      g.DrawNoteIcon(1,7) // Find some sort of solution for Question mark on Linux
+		      g.DrawNoteIcon(1,7) // TODO: Find some sort of solution for Question mark on Linux
 		    #endif
 		    
 		  end select
@@ -750,8 +832,14 @@ End
 		Visible=false
 		Group="Behavior"
 		InitialValue=""
-		Type="Integer"
-		EditorType=""
+		Type="XPlatformAlert.AlertResult"
+		EditorType="Enum"
+		#tag EnumValues
+			"0 - Cancel"
+			"1 - Action"
+			"2 - AlternateAction1"
+			"3 - AlternateAction2"
+		#tag EndEnumValues
 	#tag EndViewProperty
 	#tag ViewProperty
 		Name="SuppressButtonValue"

@@ -54,7 +54,7 @@ Begin Window Window1
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   94
+      Width           =   113
    End
 End
 #tag EndWindow
@@ -98,6 +98,10 @@ End
 		  
 		  // Check result of the suppression button
 		  var suppress as Boolean = alert.SuppressionButtonValue
+		  
+		  if suppress then
+		    MessageBox "Do now show was choosen"
+		  end if
 		  
 		End Sub
 	#tag EndEvent
