@@ -6,7 +6,7 @@ are used then more advanced custom dialog is used.
 
 The Einhugur MacOS Bridge Plugin can be obtained from: https://www.einhugur.com
 
-**For Windows, Xojo MessageDialog is used when feature set does not require more, else custom Alert is used.**
+**For Windows then Xojo MessageDialog is used when feature set does not require more, else custom Alert is used.**
 
 ![GitHub Logo](/images/CrossPlatformAlert.PNG)
 
@@ -15,7 +15,10 @@ The Einhugur MacOS Bridge Plugin can be obtained from: https://www.einhugur.com
 ![GitHub Logo](/images/MacOSAlert.PNG)
 
 
-**Linux support has not been tested or tuned yet.**
+**For Linux then Xojo MessageDialog is used when feature set does not require more, else custom Alert is used**
+**Note the Linux Custom Alert has not been extensively tested for many Linux Themes, it currently has been tested on Ubuntu 20 only.**
+
+![GitHub Logo](/images/XPlatformAlertLinux.png)
 
 **Example usage:**
 ```xojo
