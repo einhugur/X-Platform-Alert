@@ -73,6 +73,7 @@ End
 		  alert.IconType = MessageDialog.IconTypes.Caution 
 		  
 		  alert.ShowsSuppressionButton = true
+		  alert.SuppressionButtonValue = false
 		  
 		  alert.ActionButtonTitle = "Save"
 		  alert.CancelButtonTitle = "Cancel"
@@ -89,7 +90,6 @@ End
 		    
 		  case XPlatformAlert.AlertResult.Action
 		    // Action - Save in this case
-		    
 		    
 		  case XPlatformAlert.AlertResult.AlternateAction1
 		    // Alternate action

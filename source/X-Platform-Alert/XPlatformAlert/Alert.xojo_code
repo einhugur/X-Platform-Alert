@@ -80,6 +80,90 @@ Protected Class Alert
 		      return XPlatformAlert.AlertResult.AlternateAction2
 		    end select
 		    
+		  #ElseIf TargetLinux
+		    var alertStyle as EinhugurLinuxBridgeGtk.GtkMessageDialog.StyleValues
+		    
+		    select case IconType
+		      
+		    case MessageDialog.IconTypes.None
+		      alertStyle = EinhugurLinuxBridgeGtk.GtkMessageDialog.StyleValues.Other
+		      
+		    case MessageDialog.IconTypes.Caution
+		      alertStyle = EinhugurLinuxBridgeGtk.GtkMessageDialog.StyleValues.Warning
+		      
+		    case MessageDialog.IconTypes.Note
+		      alertStyle= EinhugurLinuxBridgeGtk.GtkMessageDialog.StyleValues.Information
+		      
+		    case MessageDialog.IconTypes.Question
+		      alertStyle = EinhugurLinuxBridgeGtk.GtkMessageDialog.StyleValues.Question
+		      
+		    case MessageDialog.IconTypes.Stop
+		      alertStyle = EinhugurLinuxBridgeGtk.GtkMessageDialog.StyleValues.Error
+		      
+		    end select
+		    
+		    var alert as EinhugurLinuxBridgeGtk.GtkMessageDialog = new EinhugurLinuxBridgeGtk.GtkMessageDialog( _
+		    alertStyle, _
+		    EinhugurLinuxBridgeGtk.GtkMessageDialog.ButtonValues.None)
+		    
+		    alert.Text = Message
+		    alert.SecondaryText = Explanation
+		    
+		    if ActionButtonTitle <> "" then
+		      var btn as EinhugurLinuxBridgeGtk.GtkButton =  alert.AddButton(ActionButtonTitle, Integer(XPlatformAlert.AlertResult.Action))
+		      
+		      if ActionIsDestructive then
+		        btn.SetDestructive()
+		      end if
+		    end if
+		    
+		    if CancelButtonTitle <> "" then
+		      call alert.AddButton(CancelButtonTitle, Integer(XPlatformAlert.AlertResult.Cancel))
+		    end if
+		    
+		    if AlternateButton1Title <> "" then
+		      var btn as EinhugurLinuxBridgeGtk.GtkButton =  alert.AddButton(AlternateButton1Title, Integer(XPlatformAlert.AlertResult.AlternateAction1))
+		      
+		      if AlternateButton1IsDestructive then
+		        btn.SetDestructive()
+		      end if
+		    end if
+		    
+		    if AlternateButton2Title <> "" then
+		      var btn as EinhugurLinuxBridgeGtk.GtkButton =  alert.AddButton(AlternateButton2Title, Integer(XPlatformAlert.AlertResult.AlternateAction2))
+		      
+		      if AlternateButton2IsDestructive then
+		        btn.SetDestructive()
+		      end if
+		    end if
+		    
+		    
+		    
+		    var checkbox as EinhugurLinuxBridgeGtk.GtkCheckButton 
+		    if ShowsSuppressionButton then
+		      checkbox = new EinhugurLinuxBridgeGtk.GtkCheckButton(If(SuppressionButtonTitle.Length > 0, SuppressionButtonTitle, "Do not show this message again"))
+		      checkbox.Active = SuppressionButtonValue
+		      
+		      alert.ContentArea.PackStart( checkbox, true, true, 1)
+		      
+		      // Show all the newly added custom controls in the dialog (the checkbox we added above)
+		      alert.ShowAll()
+		    end if
+		    
+		    var result as Integer = alert.ShowModal()
+		    
+		    if checkbox <> nil then
+		      SuppressionButtonValue = checkbox.Active
+		    end if
+		    
+		    alert.Destroy()
+		    
+		    // Catch if we exited with Escape
+		    if(result = EinhugurLinuxBridgeGtk.GtkDialog.RESPONSE_DELETE_EVENT) then
+		      result = Integer(XPlatformAlert.AlertResult.Cancel)
+		    end if
+		    
+		    return XPlatformAlert.AlertResult(result)
 		  #else
 		    if AlternateButton2Title <> "" or ShowsSuppressionButton then
 		      // We need to use Custom dialog here
