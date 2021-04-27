@@ -15,10 +15,9 @@ The Einhugur MacOS Bridge Plugin can be obtained from: https://www.einhugur.com
 ![GitHub Logo](/images/MacOSAlert.PNG)
 
 
-**For Linux then Xojo MessageDialog is used when feature set does not require more, else custom Alert is used**
-**Note the Linux Custom Alert has not been extensively tested for many Linux Themes, it currently has been tested on Ubuntu 20 only.**
+**For Linux native GtkMessageDialog is used**
 
-![GitHub Logo](/images/XPlatformAlertLinux.png)
+![GitHub Logo](/images/LinuxAlert.png)
 
 **Example usage:**
 ```xojo
